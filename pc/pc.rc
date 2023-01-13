@@ -1,0 +1,249 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\pc.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\pc.ico"
+IDI_CRITICAL            ICON    DISCARDABLE     "critical.ico"
+IDI_QUEST               ICON    DISCARDABLE     "quest.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_PC_DIALOG DIALOGEX 0, 0, 322, 261
+STYLE DS_MODALFRAME | WS_MINIMIZEBOX | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_STATICEDGE | WS_EX_APPWINDOW
+CAPTION "PC Health Check"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "Check now",IDCHECK,101,65,50,14
+    PUSHBUTTON      "Rename this PC",IDRENAME,12,114,60,14
+    CONTROL         131,IDPIC,"Static",SS_BITMAP,14,26,43,39
+    LTEXT           "Static",IDPCNAME,14,68,77,11,0,WS_EX_TRANSPARENT
+    LTEXT           "PC health at a glance",IDTITLE,7,7,182,16
+    LTEXT           "Static",IDRAM,14,79,73,9
+    LTEXT           "Static",IDHDD,14,89,79,8
+    LTEXT           "Static",IDAGE,14,99,67,8
+    GROUPBOX        "Introducing Windows 11",IDC_STATIC,93,25,215,63
+    LTEXT           "Let's check if this PC meets the system requirements.",
+                    IDC_STATIC,102,38,167,8
+    LTEXT           "If it does, you can get the free upgrade when it's available.",
+                    IDC_STATIC,102,48,184,8
+    GROUPBOX        "",IDC_STATIC,93,90,215,31
+    LTEXT           "Backup and sync",IDC_STATIC,100,102,56,8
+    LTEXT           "Attention required",IDC_STATIC,243,102,62,8
+    GROUPBOX        "",IDC_STATIC,93,119,215,31
+    LTEXT           "Windows Update",IDC_STATIC,100,132,56,8
+    LTEXT           "Attention required",IDC_STATIC,243,132,62,8
+    GROUPBOX        "",IDC_STATIC,93,148,215,31
+    LTEXT           "Storage capacity",IDC_STATIC,100,161,54,8
+    LTEXT           " % full",IDSPACE,276,161,29,8
+    GROUPBOX        "",IDC_STATIC,93,177,215,31
+    LTEXT           "Startup time",IDC_STATIC,100,191,38,8
+    LTEXT           "See details",IDC_STATIC,267,191,38,8
+    ICON            IDI_QUEST,IDCABTPIC,4,237,21,20,SS_NOTIFY
+    CTEXT           "About",IDABOUT,25,241,30,8,SS_NOTIFY
+END
+
+IDD_RENAME DIALOGEX 0, 0, 242, 71
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Rename this PC"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,134,50,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,185,50,50,14
+    LTEXT           "New name for this PC",IDC_STATIC,13,13,69,8
+    EDITTEXT        IDEDIT,13,27,214,12,ES_AUTOHSCROLL | NOT WS_BORDER,
+                    WS_EX_STATICEDGE
+END
+
+IDD_UNSUPP DIALOG DISCARDABLE  0, 0, 228, 132
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Error"
+FONT 8, "MS Sans Serif"
+BEGIN
+    ICON            IDI_CRITICAL,IDC_STATIC,16,11,21,20
+    LTEXT           "This PC can't run Windows 11",IDTITLE2,45,14,170,16
+    GROUPBOX        "",IDC_STATIC,19,35,191,66
+    LTEXT           "This processor isn't supported for Windows 11.\nWhile this PC doesn't meet the system  requirements to run Windows 11, you'll keep getting Windows 95 updates.",
+                    IDCABTDESC,27,47,169,40
+    PUSHBUTTON      "Learn More",IDC_BUTTON1,19,104,190,17
+END
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "CompanyName", "\0"
+            VALUE "FileDescription", "pc MFC Application\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "pc\0"
+            VALUE "LegalCopyright", "Copyright (C) 2023\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "pc.EXE\0"
+            VALUE "ProductName", "pc Application\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_PC_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 315
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 254
+    END
+
+    IDD_RENAME, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 235
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 64
+    END
+
+    IDD_UNSUPP, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 221
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 125
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP1             BITMAP  DISCARDABLE     "windows.bmp"
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "res\pc.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
