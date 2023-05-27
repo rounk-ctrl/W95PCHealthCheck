@@ -30,6 +30,7 @@ public:
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	afx_msg void OnButtonOK();
+	afx_msg void OnEditChange();
 
 // Implementation
 protected:
@@ -49,6 +50,8 @@ void CRenameDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CRenameDlg, CDialog)
 	ON_WM_SYSCOMMAND()
 	ON_BN_CLICKED(IDOK, OnButtonOK)
+	ON_EN_CHANGE(IDEDIT, OnEditChange)
+
 END_MESSAGE_MAP()
 
 BOOL CRenameDlg::OnInitDialog()
@@ -60,6 +63,21 @@ void CRenameDlg::OnButtonOK()
 	::GetWindowText(GetDlgItem(IDEDIT)->m_hWnd, &pcname, MAX_COMPUTERNAME_LENGTH);
 	EndDialog(IDOK);
 	return;
+}
+void CRenameDlg::OnEditChange()
+{
+	TCHAR e[MAX_COMPUTERNAME_LENGTH];
+	::GetWindowText(GetDlgItem(IDEDIT)->m_hWnd, e, MAX_COMPUTERNAME_LENGTH);
+	if (_tcslen(e) == 0)
+	{
+		::EnableWindow(GetDlgItem(IDOK)->m_hWnd, false);
+	}
+	else
+	{
+		::EnableWindow(GetDlgItem(IDOK)->m_hWnd, true);
+	}
+	return;
+
 }
 
 ///
@@ -107,7 +125,7 @@ BOOL CUnsupportedDlg::OnInitDialog()
 	::SendMessage(GetDlgItem(IDTITLE2)->m_hWnd, WM_SETFONT, (int)hFont, TRUE);
 
 	CString thing = "This processor isn't supported for Windows 11.\nWhile this PC doesn't meet the system  requirements to run Windows 11, you'll keep getting ";
-	CString osname = "unknown";
+	CString osname = "";
 	OSVERSIONINFO os;
 	ZeroMemory(&os, sizeof(OSVERSIONINFO));
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -115,32 +133,32 @@ BOOL CUnsupportedDlg::OnInitDialog()
 	if (os.dwPlatformId == VER_PLATFORM_WIN32_NT)
 	{
 		if (os.dwMajorVersion == 4 && os.dwMinorVersion == 0)
-			osname = "Windows NT 4";
+			osname = "Windows NT 4 ";
 		else if (os.dwMajorVersion == 5 && os.dwMinorVersion == 0)
-			osname = "Windows 2000";
+			osname = "Windows 2000 ";
 		else if (os.dwMajorVersion == 5 && os.dwMinorVersion == 1)
-			osname = "Windows XP";
+			osname = "Windows XP ";
 		else if (os.dwMajorVersion == 5 && os.dwMinorVersion == 2)
-			osname = "Windows Server 2003";
+			osname = "Windows Server 2003 ";
 		else if (os.dwMajorVersion == 6 && os.dwMinorVersion == 0)
-			osname = "Windows Vista";
+			osname = "Windows Vista ";
 		else if (os.dwMajorVersion == 6 && os.dwMinorVersion == 1)
-			osname = "Windows 7";
+			osname = "Windows 7 ";
 		else if (os.dwMajorVersion == 6 && os.dwMinorVersion == 2)
-			osname = "Windows 8";
+			osname = "Windows 8 ";
 	}
 	else
 	{
 		if (os.dwMajorVersion == 4 && os.dwMinorVersion == 00)
-			osname = "Windows 95";
+			osname = "Windows 95 ";
 		else if (os.dwMajorVersion == 4 && os.dwMinorVersion == 03)
-			osname = "Windows 95";
+			osname = "Windows 95 ";
 		else if (os.dwMajorVersion == 4 && os.dwMinorVersion == 10)
-			osname = "Windows 98";
+			osname = "Windows 98 ";
 		else if (os.dwMajorVersion == 4 && os.dwMinorVersion == 90)
-			osname = "Windows ME";
+			osname = "Windows ME ";
 	}
-	CString final = thing + osname + " updates.";
+	CString final = thing + osname + "updates.";
 	::SetWindowText(GetDlgItem(IDCABTDESC)->m_hWnd, final);
 	return TRUE;
 }
@@ -218,7 +236,11 @@ BOOL CPcDlg::OnInitDialog()
 	MEMORYSTATUS statex;
 	::GlobalMemoryStatus (&statex);
 	char buffer[101];
-	sprintf(buffer, "%d MB RAM", statex.dwTotalPhys/(1024*1024));
+	sprintf(buffer, "%d MB RAM", (statex.dwTotalPhys+1)/(1024*1024));
+	if ((statex.dwTotalPhys+1)/(1024*1024) > 1024)
+	{
+		sprintf(buffer, "%d GB RAM", (statex.dwTotalPhys+1)/(1024*1024*1024));
+	}
 	::SetWindowText(GetDlgItem(IDRAM)->m_hWnd, buffer);
 
 	// disk space
@@ -249,6 +271,10 @@ BOOL CPcDlg::OnInitDialog()
 	{
 		char space[256];
 		sprintf(space, "%d MB HDD", i64TotalBytes / (1024*1024));
+		if (i64TotalBytes / (1024*1024) > 1024)
+		{
+			sprintf(space, "%d GB HDD", i64TotalBytes / (1024*1024*1024));
+		}
 		::SetWindowText(GetDlgItem(IDHDD)->m_hWnd, space);
 		
 		// % full
@@ -306,41 +332,37 @@ HCURSOR CPcDlg::OnQueryDragIcon()
 
 BOOL SystemShutdown()
 {
-
 	OSVERSIONINFO os;
 	ZeroMemory(&os, sizeof(OSVERSIONINFO));
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 	GetVersionEx(&os);
 	if(os.dwPlatformId == VER_PLATFORM_WIN32_NT)
 	{
-
-	HANDLE hToken; 
-	TOKEN_PRIVILEGES tkp; 
+		HANDLE hToken; 
+		TOKEN_PRIVILEGES tkp; 
+		// Get a token for this process. 
+	 
+		if (!OpenProcessToken(GetCurrentProcess(), 
+				TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) 
+			return( FALSE ); 
  
-	// Get a token for this process. 
+		// Get the LUID for the shutdown privilege. 
  
-	if (!OpenProcessToken(GetCurrentProcess(), 
-		    TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) 
-		return( FALSE ); 
+		LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, 
+				&tkp.Privileges[0].Luid); 
  
-	// Get the LUID for the shutdown privilege. 
+		tkp.PrivilegeCount = 1;  // one privilege to set    
+		tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED; 
  
-	LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, 
-			&tkp.Privileges[0].Luid); 
+		// Get the shutdown privilege for this process.  
+		AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, 
+				(PTOKEN_PRIVILEGES)NULL, 0); 
  
-	tkp.PrivilegeCount = 1;  // one privilege to set    
-	tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED; 
- 
-	// Get the shutdown privilege for this process. 
- 
-	AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, 
-		    (PTOKEN_PRIVILEGES)NULL, 0); 
- 
-	if (GetLastError() != ERROR_SUCCESS) 
-		  return FALSE; 
+		if (GetLastError() != ERROR_SUCCESS) 
+			return FALSE; 
 	}
+
 	// Shut down the system and force all applications to close. 
- 
 	if (!ExitWindowsEx(EWX_REBOOT, 0))
 		return FALSE; 
 
@@ -354,18 +376,21 @@ void CPcDlg::OnButton1()
 	int result = rendlg.DoModal();
 	if (result == IDOK)
 	{
-		bool ret = SetComputerName(&rendlg.pcname);
-		if (ret == 1)
+		if (_tcslen(&rendlg.pcname) != 0)
 		{
-			int dialogres = MessageBox("You need to reboot in order to apply the changes to this PC. Reboot now?", "Rename this PC", MB_YESNO | MB_ICONINFORMATION);
-			if (dialogres == IDYES)
+			int ret = SetComputerName(&rendlg.pcname);
+			if (ret == 1)
 			{
-				SystemShutdown();
+				int dialogres = MessageBox("You need to reboot in order to apply the changes to this PC. Reboot now?", "Rename this PC", MB_YESNO | MB_ICONINFORMATION);
+				if (dialogres == IDYES)
+				{
+					SystemShutdown();
+				}
 			}
-		}
-		else
-		{
-			MessageBox("error", 0,0);
+			else
+			{
+				MessageBox("error", 0,0);
+			}
 		}
 	}
 }
